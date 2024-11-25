@@ -6,7 +6,6 @@ const fetch = require('node-fetch');
 require('dotenv').config();
 const path = require('path');
 
-
 const app = express();
 
 // Função para renovar o token de acesso
@@ -103,7 +102,12 @@ function ensureAuthenticated(req, res, next) {
     res.redirect('/login');
 }
 
-// Rotas
+// Rota para redirecionar da raiz para /home
+app.get('/', (req, res) => {
+    res.redirect('/home'); // Redireciona diretamente para a home
+});
+
+// Rota para login com Spotify
 app.get('/login', passport.authenticate('spotify'));
 
 // Após autenticação bem-sucedida, redirecionar para o front-end (home)
@@ -124,10 +128,17 @@ app.use(express.static(path.join(__dirname, 'front', 'public')));
 
 // Rota para o front-end (home), já com o token de acesso
 app.get('/home', ensureAuthenticated, (req, res) => {
-    // Aqui, ao invés de retornar HTML com o perfil, você pode servir a sua página home do front-end.
-    res.sendFile(path.join(__dirname, 'front', 'public', 'home.html'));  // Ou o caminho para o seu front-end
+    // Se o token de acesso não estiver presente ou expirado, não tentamos carregar as playlists.
+    if (!req.user.accessToken || Date.now() > req.user.expires_in) {
+        return res.send('<h1>Token de acesso inválido ou expirado. Faça login novamente.</h1>');
+    }
+
+    // Caso contrário, redireciona para a página home do front-end
+    res.sendFile(path.join(__dirname, 'front', 'public', 'home.html'));
 });
 
+
+// Rota para logout
 app.get('/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
@@ -137,27 +148,6 @@ app.get('/logout', (req, res) => {
         res.redirect('/login');
     });
 });
-
-app.get('/profile', ensureAuthenticated, (req, res) => {
-    const user = req.user;
-    res.send(`
-        <h1>Bem-vindo, ${user.profile.displayName}</h1>
-        <p>ID do Spotify: ${user.profile.id}</p>
-        <p>Email: ${user.profile.emails[0]?.value || 'Não disponível'}</p>
-        <p>País: ${user.profile.country}</p>
-        <p>Plano: ${user.profile.product}</p>
-        <img src="${user.profile.photos[0]?.value || ''}" alt="Foto do perfil" width="150">
-        <a href="${user.profile.profileUrl}" target="_blank">Perfil no Spotify</a>
-        <br>
-        <a href="/playlists">Ver Minhas Playlists</a>
-    `);
-});
-
-app.get('/callback', passport.authenticate('spotify', { failureRedirect: '/login' }), (req, res) => {
-    // Aqui, você passa o token de acesso e outras informações para o front-end
-    res.redirect(`/dashboard?access_token=${req.user.accessToken}`);
-});
-
 
 // Exibição detalhada das playlists
 app.get('/playlists', ensureAuthenticated, async (req, res) => {
@@ -170,29 +160,22 @@ app.get('/playlists', ensureAuthenticated, async (req, res) => {
 
         if (!response.ok) {
             console.error(`Erro ao buscar playlists: ${response.statusText}`);
-            return res.status(response.status).send('Erro ao buscar playlists.');
+            return res.status(response.status).json({ error: 'Erro ao buscar playlists.' });
         }
 
         const playlists = await response.json();
 
-        const html = playlists.items
-            .map(
-                (playlist) => `
-                <div>
-                    <h2>${playlist.name}</h2>
-                    <img src="${playlist.images[0]?.url || ''}" alt="Capa da Playlist" width="150">
-                    <p><a href="${playlist.external_urls.spotify}" target="_blank">Abrir no Spotify</a></p>
-                </div>
-            `
-            )
-            .join('');
+        if (playlists.items.length === 0) {
+            return res.json({ error: 'Nenhuma playlist encontrada.' });
+        }
 
-        res.send(`<h1>Suas Playlists</h1>${html}`);
+        res.json(playlists);
     } catch (error) {
         console.error('Erro ao buscar playlists:', error.message);
-        res.status(500).send('Erro ao buscar playlists.');
+        res.status(500).json({ error: 'Erro ao buscar playlists.' });
     }
 });
+
 
 // Rota para criar playlist
 app.post('/create-playlist', ensureAuthenticated, express.json(), async (req, res) => {
@@ -224,8 +207,6 @@ app.post('/create-playlist', ensureAuthenticated, express.json(), async (req, re
         res.status(500).send('Erro ao criar playlist.');
     }
 });
-
-
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 3000;

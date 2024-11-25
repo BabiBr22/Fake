@@ -8,33 +8,11 @@
     
 </head>
 <body>
+    <header>
+        <a href="home.html">Home</a>
+    </header>
     <h1>Reproduzindo Música</h1>
     <div id="player-container"></div>
-
-    <!-- Player de música -->
-    <iframe id="spotifyPlayer" src="" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-
-    <!-- Controles de reprodução -->
-    <div>
-        <button id="play-pause-btn">▶</button>
-        <button id="prev-btn">⏮</button>
-        <button id="next-btn">⏭</button>
-    </div>
-
-    <div>
-        <input type="range" id="progress" value="0" max="100">
-        <span id="current-time">0:00</span> / <span id="duration">0:00</span>
-    </div>
-
-    <div>
-        <input type="range" id="volume" value="50" max="100">
-        <span id="volume-icon">🔊</span>
-    </div>
-
-    <div>
-        <p id="song-title">Song Title</p>
-        <p id="artist-name">Artist Name</p>
-    </div>
 
     <!-- Referência ao arquivo JS -->
     <script src="./scripts/home.js"></script>

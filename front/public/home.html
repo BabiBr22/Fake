@@ -9,29 +9,11 @@
 </head>
 
 <body>
-
-  <script>
-    // Função para pegar o token da URL
-    function getAccessTokenFromURL() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('access_token');
-    }
-
-    // Inicialização
-    (function init() {
-      const accessToken = getAccessTokenFromURL();
-      if (accessToken) {
-        console.log('Token de acesso:', accessToken);
-        fetchPlaylists(accessToken); // Exemplo de uso do token para buscar playlists
-      }
-    })();
-  </script>
-
   <div class="sidebar">
     <h2>Spotify</h2>
     <nav>
       <ul>
-        <li><a href="home.html">Home</a></li>
+        <li><a href="home.html" id="goToHomeBtn">Home</a></li>
         <li><a href="playlists.html" id="goToPlaylistsBtn">Ir para minhas playlists</a></li>
       </ul>
     </nav>
@@ -46,39 +28,142 @@
       <input type="text" id="searchInput" placeholder="Digite o nome do artista...">
       <button id="searchButton">Pesquisar</button>
     </header>
-    
+
     <div id="artistInfo">
       <img id="artistImage" src="" alt="" style="display: none;">
       <h2 id="artistName"></h2>
       <ul id="trackList"></ul>
     </div>
-
   </div>
 
+  <!-- Tela de Playlists -->
   <div id="playlistsScreen" style="display: none;">
-  <h2>Minhas Playlists</h2>
-  <ul id="playlistsList">
-    <!-- Playlists serão carregadas dinamicamente -->
-  </ul>
-</div>
+    <h2>Minhas Playlists</h2>
+    <div id="playlistsContainer">
+      <!-- Playlists serão carregadas dinamicamente -->
+    </div>
+  </div>
 
-<div id="songsScreen" style="display: none;">
-  <h2 id="playlistName"></h2>
-  <ul id="songsList">
-    <!-- Músicas da playlist selecionada -->
-  </ul>
-</div>
+  <!-- Tela de Músicas -->
+  <div id="songsScreen" style="display: none;">
+    <h2 id="playlistName"></h2>
+    <ul id="songsList">
+      <!-- Músicas da playlist selecionada -->
+    </ul>
+  </div>
 
-
-  <!-- Contêiner para as playlists -->
-  <div id="playlistsContainer"></div>
-
-  <!-- Player de música -->
+  <!-- Contêiner para o Player -->
   <div id="player-container">
     <iframe id="trackPlayer" width="300" height="380" frameborder="0" allow="encrypted-media"></iframe>
   </div>
 
+  <img id="track-image" src="" alt="Track Image">
+
   <script src="./scripts/home.js"></script>
+
+  <script defer>
+    // Função para carregar playlists
+async function fetchPlaylists() {
+  const accessToken = new URLSearchParams(window.location.search).get('access_token');
+  
+  if (accessToken) {
+    try {
+      const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data.error) {
+        alert('Não foi possível carregar suas playlists.');
+      } else {
+        // Exibe as playlists
+        const playlistsContainer = document.getElementById('playlistsContainer');
+        playlistsContainer.innerHTML = ''; // Limpa a lista antes de preencher
+
+        data.items.forEach((playlist) => {
+          const playlistDiv = document.createElement('div');
+          playlistDiv.classList.add('playlist');
+          playlistDiv.innerHTML = `
+            <h3>${playlist.name}</h3>
+            <button onclick="loadPlaylistTracks('${playlist.id}', '${playlist.name}')">Ver músicas</button>
+          `;
+          playlistsContainer.appendChild(playlistDiv);
+        });
+
+        // Exibe a tela de playlists
+        document.getElementById('playlistsScreen').style.display = 'block';
+        document.getElementById('songsScreen').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'none'; // Esconde o conteúdo principal
+      }
+    } catch (error) {
+      console.error('Erro ao buscar playlists:', error);
+      alert('Erro ao carregar playlists.');
+    }
+  }
+}
+
+// Função para carregar as músicas de uma playlist
+async function loadPlaylistTracks(playlistId, playlistName) {
+  const accessToken = new URLSearchParams(window.location.search).get('access_token');
+  
+  if (accessToken) {
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data.error) {
+        alert('Não foi possível carregar as músicas desta playlist.');
+      } else {
+        // Exibe as músicas
+        const songsList = document.getElementById('songsList');
+        songsList.innerHTML = ''; // Limpa a lista de músicas
+
+        // Verifica se há músicas na resposta
+        if (data.items && data.items.length > 0) {
+          data.items.forEach((item) => {
+            const track = item.track;
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <a href="javascript:void(0)" onclick="playTrack('${track.uri}')">
+                <img src="${track.album.images[0]?.url}" alt="${track.name}" width="50" />
+                ${track.name} - ${track.artists.map(artist => artist.name).join(', ')}
+              </a>
+            `;
+            songsList.appendChild(listItem);
+          });
+        } else {
+          songsList.innerHTML = '<li>Esta playlist não tem músicas.</li>';
+        }
+
+        // Exibe a tela de músicas
+        document.getElementById('songsScreen').style.display = 'block';
+        document.getElementById('playlistsScreen').style.display = 'none';
+        document.getElementById('playlistName').textContent = playlistName;  // Exibe o nome da playlist
+      }
+    } catch (error) {
+      console.error('Erro ao carregar músicas:', error);
+      alert('Erro ao carregar músicas.');
+    }
+  }
+}
+
+// Função para tocar a música
+function playTrack(trackUri) {
+  const player = document.getElementById('trackPlayer');
+  player.src = `https://open.spotify.com/embed/track/${trackUri.split(':')[2]}`;
+}
+
+// Carrega as playlists ao abrir a página
+window.addEventListener('load', fetchPlaylists);
+
+  </script>
+
 </body>
 
 </html>
