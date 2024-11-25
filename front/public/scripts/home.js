@@ -1,8 +1,11 @@
 // Configurações da API do Spotify
-const CLIENT_ID = ''; // Substitua pelo seu Client ID
+const CLIENT_ID = 'cf39a7ceb4548469b07b1dc51d30510'; // Substitua pelo seu Client ID
 const REDIRECT_URI = 'http://localhost:3000/callback'; // Substitua pelo URL da sua página
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const RESPONSE_TYPE = 'df5c5dc9b4be42f4be50800cdec9c5ac';
+
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
  
