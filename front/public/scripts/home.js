@@ -2,10 +2,7 @@
 const CLIENT_ID = ''; // Substitua pelo seu Client ID
 const REDIRECT_URI = 'http://localhost:3000/callback'; // Substitua pelo URL da sua página
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-const RESPONSE_TYPE = '';
-
-
-
+const RESPONSE_TYPE = 'df5c5dc9b4be42f4be50800cdec9c5ac';
 
 document.addEventListener('DOMContentLoaded', function() {
  
