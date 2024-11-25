@@ -1,0 +1,269 @@
+/* styles.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  background: #121212;
+  color: white;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  font-size: 1.8em;
+  color: #1db954;
+  margin-bottom: 20px;
+}
+
+.sidebar nav ul,
+.sidebar .playlists ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li a,
+.sidebar .playlists ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  transition: color 0.3s ease;
+  font-size: 1.1em;
+}
+
+.sidebar nav ul li a:hover,
+.sidebar .playlists ul li a:hover {
+  color: #1db954;
+}
+
+.sidebar nav ul li a:focus,
+.sidebar .playlists ul li a:focus {
+  outline: 2px solid #1db954;
+  outline-offset: 4px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header input {
+  width: 70%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #282828;
+  color: white;
+  font-size: 1em;
+}
+
+header button {
+  background: #1db954;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 1em;
+}
+
+header button:hover,
+header button:focus {
+  background: #14833b;
+}
+
+header button:focus {
+  outline: 2px solid #14833b;
+  outline-offset: 4px;
+}
+
+.welcome {
+  text-align: left;
+}
+
+.welcome h1 {
+  margin-bottom: 20px;
+}
+
+.featured {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.suggested {
+  text-align: left;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #282828;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  background: #1db954;
+  transform: scale(1.05);
+}
+
+.card:focus {
+  outline: 2px solid #1db954;
+  outline-offset: 4px;
+}
+
+#playlistsContainer {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.playlist-item {
+  background: #282828;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+}
+
+.playlist-item:hover {
+  background: #1db954;
+  transform: scale(1.05);
+}
+
+.playlist-item:focus {
+  outline: 2px solid #1db954;
+  outline-offset: 4px;
+}
+
+.playlist-item img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.playlist-item span {
+  display: block;
+  margin-top: 10px;
+  color: white;
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+    padding: 15px;
+  }
+
+  .sidebar h2 {
+    font-size: 1.6em;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  header input {
+    width: 60%;
+  }
+
+  header button {
+    padding: 8px 15px;
+  }
+
+  .featured {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .sidebar h2 {
+    font-size: 1.4em;
+  }
+
+  .main-content {
+    margin-top: 60px;
+    padding: 10px;
+  }
+
+  header input {
+    width: 50%;
+  }
+
+  header button {
+    padding: 8px 12px;
+  }
+
+  .featured,
+  .grid {
+    display: block;
+  }
+}
+
+
+#playlistsScreen, #songsScreen {
+  padding: 20px;
+}
+
+#playlistsList, #songsList {
+  list-style: none;
+  padding: 0;
+}
+
+#playlistsList li, #songsList li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+#playlistsList li:hover, #songsList li:hover {
+  background-color: #f0f0f0;
+}

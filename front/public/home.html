@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Home</title>
+  <link rel="stylesheet" href="./estilos/home.css">
+</head>
+
+<body>
+
+  <script>
+    // Função para pegar o token da URL
+    function getAccessTokenFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('access_token');
+    }
+
+    // Inicialização
+    (function init() {
+      const accessToken = getAccessTokenFromURL();
+      if (accessToken) {
+        console.log('Token de acesso:', accessToken);
+        fetchPlaylists(accessToken); // Exemplo de uso do token para buscar playlists
+      }
+    })();
+  </script>
+
+  <div class="sidebar">
+    <h2>Spotify</h2>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="playlists.html" id="goToPlaylistsBtn">Ir para minhas playlists</a></li>
+      </ul>
+    </nav>
+    <div class="playlists">
+      <h3>Playlists</h3>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Pesquise pelo artista</h1>
+      <input type="text" id="searchInput" placeholder="Digite o nome do artista...">
+      <button id="searchButton">Pesquisar</button>
+    </header>
+    
+    <div id="artistInfo">
+      <img id="artistImage" src="" alt="" style="display: none;">
+      <h2 id="artistName"></h2>
+      <ul id="trackList"></ul>
+    </div>
+
+  </div>
+
+  <div id="playlistsScreen" style="display: none;">
+  <h2>Minhas Playlists</h2>
+  <ul id="playlistsList">
+    <!-- Playlists serão carregadas dinamicamente -->
+  </ul>
+</div>
+
+<div id="songsScreen" style="display: none;">
+  <h2 id="playlistName"></h2>
+  <ul id="songsList">
+    <!-- Músicas da playlist selecionada -->
+  </ul>
+</div>
+
+
+  <!-- Contêiner para as playlists -->
+  <div id="playlistsContainer"></div>
+
+  <!-- Player de música -->
+  <div id="player-container">
+    <iframe id="trackPlayer" width="300" height="380" frameborder="0" allow="encrypted-media"></iframe>
+  </div>
+
+  <script src="./scripts/home.js"></script>
+</body>
+
+</html>

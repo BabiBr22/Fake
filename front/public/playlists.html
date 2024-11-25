@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Playlists</title>
+
+    <script>
+        window.addEventListener('load', function () {
+            // Verificar se estamos na página de playlists
+            if (window.location.pathname.includes('playlists')) {  // Assumindo que a URL contém 'playlists'
+                document.getElementById('playlistsContainer').style.display = 'block';  // Exibe o contêiner das playlists
+                document.getElementById('player-container').style.display = 'block';  // Exibe o player de música
+                document.getElementById('playlistsScreen').style.display = 'block';  // Exibe a tela de playlists
+                document.getElementById('songsScreen').style.display = 'none';  // Esconde a tela de músicas
+            } else {
+                document.getElementById('playlistsContainer').style.display = 'none';  // Esconde o contêiner das playlists
+                document.getElementById('player-container').style.display = 'none';  // Esconde o player de música
+                document.getElementById('playlistsScreen').style.display = 'none';  // Esconde a tela de playlists
+                document.getElementById('songsScreen').style.display = 'none';  // Esconde a tela de músicas
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #playlistsScreen,
+        #songsScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #playlistsList,
+        #songsList {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        li {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #e9e9e9;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        li:hover {
+            background-color: #ddd;
+        }
+
+        #player-container {
+            display: none; /* Inicialmente escondido */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Contêiner para as playlists -->
+    <div id="playlistsContainer"></div>
+
+    <!-- Player de música -->
+    <div id="player-container" style="display: none;">
+        <iframe id="trackPlayer" width="300" height="380" frameborder="0" allow="encrypted-media"></iframe>
+    </div>
+
+    <!-- Tela de Playlists -->
+    <div id="playlistsScreen" style="display: none;">
+        <h2>Minhas Playlists</h2>
+        <ul id="playlistsList">
+            <!-- As playlists serão adicionadas aqui dinamicamente -->
+        </ul>
+    </div>
+
+    <!-- Tela de Músicas (quando uma playlist for selecionada) -->
+    <div id="songsScreen" style="display: none;">
+        <h2 id="playlistName"></h2>
+        <ul id="songsList">
+            <!-- As músicas da playlist serão listadas aqui -->
+        </ul>
+    </div>
+
+    
+
+    <script src="./scripts/playlists.js"></script>
+</body>
+
+</html>

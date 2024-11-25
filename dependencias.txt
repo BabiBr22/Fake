@@ -1,0 +1,2 @@
+npm install express passport passport-spotify express-session dotenv
+npm install node-fetch@2

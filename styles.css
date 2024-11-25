@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  #playlist-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .playlist-card {
+    background-color: #1db954;
+    border-radius: 10px;
+    width: 200px;
+    overflow: hidden;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+  }
+  
+  .playlist-card img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .playlist-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .playlist-title {
+    padding: 10px;
+  }
+  
